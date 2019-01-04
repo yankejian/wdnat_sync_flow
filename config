@@ -1,0 +1,234 @@
+{   
+	"type": "wd_fw_det", 
+	"base": {
+		"root":   "./",    
+		"running_log":    "running.log",    
+		"hw_log":     "hw.log",
+		"flow_log":		"flow.log",
+		"alert_log":	"alert.log",
+		"mon_ip_max":	5000,
+		"mon_netport_max":	10000
+	},
+	"debug": {
+		"hwlog":   "on",    
+		"monlog":  "on",
+		"monitor_vip":  "1.0.0.0",
+		"do_pcap": "off",
+		"log_level":	 3
+	},
+	"plat": {
+		"eal_args":   "-c0xffffff -n4 --",    
+		"hugepage_size":    "1G",    
+		"nr_hugepages":     30
+	},
+	"dev": [
+		{ "pci":  "0000:05:00.0", "max_queue": 16 },
+		{ "pci":  "0000:05:00.1", "max_queue": 16 },
+		{ "pci":  "0000:81:00.0", "max_queue": 16 },
+		{ "pci":  "0000:81:00.1", "max_queue": 16 }
+	],
+	"settle_mode": {
+		"mode": "gw-bonding",
+		"in_port": {			
+			"if_no": 0,
+			"port_no":[0,1],
+			"ip": "10.10.10.2",
+			"gwip": "10.10.10.1",
+			"netmask": "255.255.255.0",
+			"vlanid": 1033
+		},
+		"out_port": {
+			"if_no": 1,
+			"port_no":[2,3],
+			"ip": "172.16.50.1",
+			"gwip": "172.16.50.100",
+			"netmask": "255.255.255.0",
+			"vlanid": 1034
+		}
+	},
+	"nat_config": {
+			"config_region_tag": "dg",
+			"config_pool_tag": "default",
+			"remoteconfig_addr": "192.168.50.118",
+			"remoteconfig_port":8082,
+			"remoteconfig_usrname": "admin",
+			"remoteconfig_password": "admin",
+			"natconfig_ver":"/api/v1.0/version/dnat",
+			"natconfig":"/api/v1.0/nat/dnat",
+			"bandwidth_ver":"/api/v1.0/version/defense_ip",
+			"bandwidth":"/api/v1.0/defense_ip",
+			"rip_linkstatus":"/api/v1.0/check/port"
+	},
+	"layout": {
+		"pipe_distribute": {
+			"dist_ring_cnt": 65536,
+			"deadtime":300,
+			"deadtime_reset":10,
+			"core_map": [
+				{ "core_no": 0, 
+				"port_map": [
+					{"port_no": 0, "in_q": "0x1"}
+				]},
+				{ "core_no": 1, 
+				"port_map": [
+					{"port_no": 1, "in_q": "0x1"}
+				]},
+				{ "core_no": 14, 
+				"port_map": [
+					{"port_no": 2, "in_q": "0x1"}
+				]},
+				{ "core_no": 15, 
+				"port_map": [
+					{"port_no": 3, "in_q": "0x1"}
+				]}
+			]		
+		},
+		"pipe_io": {
+			"function": "io_in",
+			"ippool_num": 8192,
+			"netportpool_num": 8192,
+			"flowtag_num": 7000000,
+			"flow_num": 2000000,
+			"flownat_num": 7000000,
+			"srcsum_num": 5000000,
+			"srcip_policy_pool": 10000000,
+			"io2dis_num": 500000,
+			"core_map":[
+				{
+				"core_no": 2, 
+				"port_map": [
+					{"port_no": 0, "txport_no": 2, "in_q": "0x1", "out_q": "0x111" }
+				]},
+				{
+				"core_no": 3, 
+				"port_map": [
+					{"port_no": 0, "txport_no": 2, "in_q": "0x2", "out_q": "0x222" }
+				]},
+				{
+				"core_no": 4, 
+				"port_map": [
+					{"port_no": 0, "txport_no": 2, "in_q": "0x4", "out_q": "0x444" }
+				]},
+				{
+				"core_no": 5, 
+				"port_map": [
+					{"port_no": 0, "txport_no": 2, "in_q": "0x8", "out_q": "0x888" }
+				]},
+				{
+				"core_no": 6, 
+				"port_map": [
+					{"port_no": 1, "txport_no": 3, "in_q": "0x1", "out_q": "0x111" }
+				]},
+				{
+				"core_no": 7, 
+				"port_map": [
+					{"port_no": 1, "txport_no": 3, "in_q": "0x2", "out_q": "0x222" }
+				]},
+				{
+				"core_no": 8, 
+				"port_map": [
+					{"port_no": 1, "txport_no": 3, "in_q": "0x4", "out_q": "0x444" }
+				]},
+				{
+				"core_no": 9, 
+				"port_map": [
+					{"port_no": 1, "txport_no": 3, "in_q": "0x8", "out_q": "0x888" }
+				]}				
+			]
+		},
+		"pipe_io_out": {
+			"function": "io_out",
+			"ippool_num": 8192,
+			"netportpool_num": 8192,
+			"flowtag_num": 7000000,
+			"flow_num": 2000000,
+			"flownat_num": 7000000,
+			"core_map":[
+				{
+				"core_no": 16, 
+				"port_map": [
+					{"port_no": 2, "txport_no": 0, "in_q": "0x1", "out_q": "0x111" }
+				]},
+				{
+				"core_no": 17, 
+				"port_map": [
+					{"port_no": 2, "txport_no": 0, "in_q": "0x2", "out_q": "0x222" }
+				]},
+				{
+				"core_no": 18, 
+				"port_map": [
+					{"port_no": 2, "txport_no": 0, "in_q": "0x4", "out_q": "0x444" }
+				]},
+				{
+				"core_no": 19, 
+				"port_map": [
+					{"port_no": 2, "txport_no": 0, "in_q": "0x8", "out_q": "0x888" }
+				]},
+				{
+				"core_no": 20, 
+				"port_map": [
+					{"port_no": 3, "txport_no": 1, "in_q": "0x1", "out_q": "0x111" }
+				]},
+				{
+				"core_no": 21, 
+				"port_map": [
+					{"port_no": 3, "txport_no": 1, "in_q": "0x2", "out_q": "0x222" }
+				]},
+				{
+				"core_no": 22, 
+				"port_map": [
+					{"port_no": 3, "txport_no": 1, "in_q": "0x4", "out_q": "0x444" }
+				]},
+				{
+				"core_no": 23, 
+				"port_map": [
+					{"port_no": 3, "txport_no": 1, "in_q": "0x8", "out_q": "0x888" }
+				]}
+			]
+		},
+		"pipe_linux": {
+			"core_no": 12,
+			"port_map": [
+				{ "port_no": 0, "queue_no": 12 },
+				{ "port_no": 1, "queue_no": 12 },
+				{ "port_no": 2, "queue_no": 12 },
+				{ "port_no": 3, "queue_no": 12 }			
+			]
+		},		
+		"pipe_sum": {
+			"sum_ippool_cnt": 3000000,
+			"sum_netportpool_num": 3000000,
+			"sum_map": [
+				{ "core_no": 10, "core_mask": "0xff0ff" }
+			]		
+		},
+		"pipe_gather": {
+			"core_map":  [
+				{ "core_no": 11, "core_mask": "0x400" }	
+			]			
+		},
+                "pipe_sum_src": {
+                        "sum_srcippool_cnt": 10000000,
+                        "dstip_policy_pool": 1000000,
+                        "msg_pool_cnt": 1000000,
+                        "core_map": [
+                                { "core_no": 13, "core_mask": "0x2000" }
+                        ]
+                },
+		"event_kafka": {
+			"brokers_list": "192.168.50.11:9092",
+			"machine_stat_event": {
+				"topic_name": "nat_machine_stats"
+			},
+			"dstip_stat_event": {
+				"topic_name": "nat_package_stats"
+			},
+			"attack_event": {
+				"topic_name": "fw_attack_event"
+			},
+			"src_station_event": {
+				"topic_name": "nat_src_station_event"
+			}
+		}
+	}
+}

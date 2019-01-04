@@ -1,0 +1,39 @@
+{   
+	"type": "global",
+	"flood_th": {
+		"pps": 50000,
+		"bps": 50000000
+	},
+	"land": {
+		"action": "drop",
+		"cap": "true"
+	},
+	"smurf": {
+		"action": "drop",
+		"cap": "true"
+	},
+	"fraggle": {
+		"action": "drop",
+		"cap": "false"
+	},
+	"nuker": {
+		"action": "forward",
+		"cap": "true"
+	},	
+	"tracert": {
+		"action": "drop",
+		"cap": "true"
+	},
+	"ipoption": {
+		"action": "drop",
+		"cap": "true"
+	},
+	"tcpbad": {
+		"action": "drop",
+		"cap": "true"
+	},
+	"limit": {
+		"pps": 10000,
+		"bps": 10000000
+	}
+}
